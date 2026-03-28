@@ -22,7 +22,7 @@ from app.services.market_scanner_service import (
 from app.services.news_ingestion_service import fetch_recent_news, score_news
 from app.services.volatility_service import compute_volatility
 from app.services.macro_context_service import build_macro_context
-from app.services.signal_engine_service import build_signal
+from app.services.signal_service import build_signal
 from app.services.forecast_service import run_forecast_bundle
 from app.services.data_ingestion import fetch_oil_price_data
 from app.services.analysis_service import load_supply
@@ -43,8 +43,8 @@ def intelligence_summary() -> IntelligenceSummary:
     news_headlines = fetch_recent_news()
     news = score_news(news_headlines)
     macro = build_macro_context(df_prices)
-    forecast = run_forecast_bundle(df_prices, horizons=[7, 30, 60])
-    signal = build_signal(scanner, volatility, news, forecast)
+    forecast = run_forecast_bundle(df_prices, horizons=[7, 30])
+    signal = build_signal(df_prices, forecast, volatility)
     price_series = build_price_series(df_prices)
     shocks = detect_price_shocks(df_prices)
     supply = supply_distribution(df_supply)

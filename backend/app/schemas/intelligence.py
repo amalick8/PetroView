@@ -22,6 +22,13 @@ class ForecastComparison(BaseModel):
 class ForecastBundle(BaseModel):
     direction: str
     confidence: float
+    model_used: Optional[str] = None
+    mae: Optional[float] = None
+    rmse: Optional[float] = None
+    forecast: Optional[List[float]] = None
+    confidence_interval: Optional[List[Dict[str, float]]] = None
+    feature_importance: Optional[List[Dict[str, float]]] = None
+    explanations: Optional[List[str]] = None
     horizons: List[ForecastHorizon]
     model_comparison: List[ForecastComparison]
 
@@ -49,6 +56,7 @@ class SignalSummary(BaseModel):
     strength: float
     confidence: float
     risk_level: str
+    volatility_regime: Optional[str] = None
     reasoning: List[str]
 
 

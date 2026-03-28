@@ -50,7 +50,10 @@ def run_forecast_route(
         model_name=model_name,
         model_version="1.0",
         parameters_payload={"horizon_days": request.horizon_days},
-        metrics_payload=forecast_result["metrics"],
+        metrics_payload={
+            "mae": forecast_result.get("mae"),
+            "rmse": forecast_result.get("rmse"),
+        },
     )
     session.add(model_run)
     session.commit()

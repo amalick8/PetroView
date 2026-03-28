@@ -1,12 +1,15 @@
 "use client";
 
-import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 type PricePoint = { date: string; price: number };
-type ForecastPoint = { date: string; forecast: number };
+type ForecastPoint = { date: string; forecast: number; lower?: number; upper?: number };
 
 export function PriceForecastChart({ actual, forecast }: { actual: PricePoint[]; forecast: ForecastPoint[] }) {
-  const merged = new Map<string, { date: string; price?: number; forecast?: number }>();
+  const merged = new Map<
+    string,
+    { date: string; price?: number; forecast?: number; lower?: number; upper?: number }
+  >();
 
   actual.forEach((point) => {
     merged.set(point.date, { date: point.date, price: point.price });
@@ -14,7 +17,12 @@ export function PriceForecastChart({ actual, forecast }: { actual: PricePoint[];
 
   forecast.forEach((point) => {
     const existing = merged.get(point.date) || { date: point.date };
-    merged.set(point.date, { ...existing, forecast: point.forecast });
+    merged.set(point.date, {
+      ...existing,
+      forecast: point.forecast,
+      lower: point.lower,
+      upper: point.upper
+    });
   });
 
   const data = Array.from(merged.values());
@@ -31,6 +39,14 @@ export function PriceForecastChart({ actual, forecast }: { actual: PricePoint[];
             borderRadius: 12
           }}
           labelStyle={{ color: "#f5c46a" }}
+        />
+        <Area
+          type="monotone"
+          dataKey="upper"
+          stroke="none"
+          fill="rgba(31,111,235,0.18)"
+          baseLine={(data) => data.lower}
+          connectNulls
         />
         <Line dataKey="price" type="monotone" stroke="#f5c46a" strokeWidth={2} dot={false} />
         <Line dataKey="forecast" type="monotone" stroke="#1f6feb" strokeWidth={2} dot={false} />

@@ -25,6 +25,13 @@ export type IntelligenceSummary = {
   forecast: {
     direction: string;
     confidence: number;
+    model_used?: string;
+    mae?: number;
+    rmse?: number;
+    forecast?: number[];
+    confidence_interval?: { lower: number; upper: number }[];
+    feature_importance?: { feature: string; importance: number }[];
+    explanations?: string[];
     horizons: {
       horizon_days: number;
       model: string;
@@ -59,6 +66,7 @@ export type IntelligenceSummary = {
     strength: number;
     confidence: number;
     risk_level: string;
+    volatility_regime?: string;
     reasoning: string[];
   };
 };

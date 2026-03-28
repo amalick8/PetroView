@@ -37,8 +37,32 @@ export default async function Dashboard() {
 	const supplySeries = intelligence?.supply_distribution?.length ? intelligence.supply_distribution : demoSupplyDistribution;
   const forecastHorizon = forecast?.horizons?.find((horizon) => horizon.horizon_days === 30) ?? forecast?.horizons?.[0];
 	const forecastSeries = forecastHorizon
-		? forecastHorizon.dates.map((date, idx) => ({ date, forecast: forecastHorizon.values[idx] }))
+		? forecastHorizon.dates.map((date, idx) => ({
+				date,
+				forecast: forecastHorizon.values[idx],
+				lower: forecastHorizon.lower?.[idx],
+				upper: forecastHorizon.upper?.[idx]
+			}))
 		: [];
+	const insights = intelligence
+		? [
+				{
+					label: "Volatility Regime",
+					value: `${volatility?.regime ?? "medium"}`,
+					detail: `Volatility sits around the ${(volatility?.percentile ?? 0).toFixed(0)}th percentile.`
+				},
+				{
+					label: "Forecast Model",
+					value: forecast?.model_used ?? "best_model",
+					detail: `RMSE ${forecast?.rmse?.toFixed(2) ?? "-"} with ${forecast?.direction ?? "neutral"} bias.`
+				},
+				{
+					label: "Momentum Regime",
+					value: scanner?.momentum_regime ?? "range",
+					detail: `30D return ${(scanner?.return_30d ?? 0).toFixed(2)}.`
+				}
+			]
+		: demoInsights;
 	return (
 		<main className="min-h-screen px-6 pb-24">
 			<section className="mx-auto max-w-6xl pt-16">
@@ -210,7 +234,7 @@ export default async function Dashboard() {
 				</div>
 
 				<div className="mt-10 grid gap-6 lg:grid-cols-3">
-					{demoInsights.map((insight) => (
+					{insights.map((insight) => (
 						<Card key={insight.label} className="p-6">
 							<p className="text-xs uppercase tracking-[0.25em] text-gold/70">{insight.label}</p>
 							<p className="mt-3 text-2xl font-semibold text-white">{insight.value}</p>
