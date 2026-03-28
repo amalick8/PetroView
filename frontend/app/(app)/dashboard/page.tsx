@@ -3,24 +3,7 @@ import { Card } from "@/components/ui/card";
 import { PriceTrendChart } from "@/components/charts/line-chart";
 import { VolatilityChart } from "@/components/charts/area-chart";
 import { SupplyConcentrationChart } from "@/components/charts/bar-chart";
-
-const insights = [
-	{
-		label: "Volatility Regime",
-		value: "Elevated, cooling",
-		detail: "Rolling 30-day volatility eased 12% week over week."
-	},
-	{
-		label: "Supply Concentration",
-		value: "HHI 0.24",
-		detail: "Top three producers represent 44% of global output."
-	},
-	{
-		label: "Forecast Bias",
-		value: "Mild upside",
-		detail: "ARIMA and regression models favor modest price drift."
-	}
-];
+import { demoInsights } from "@/lib/demo-data";
 
 export default function Dashboard() {
 	return (
@@ -33,7 +16,7 @@ export default function Dashboard() {
 				</p>
 
 				<div className="mt-8 grid gap-6 lg:grid-cols-3">
-					{insights.map((insight) => (
+					{demoInsights.map((insight) => (
 						<Card key={insight.label} className="p-6">
 							<p className="text-xs uppercase tracking-[0.25em] text-gold/70">{insight.label}</p>
 							<p className="mt-3 text-2xl font-semibold text-white">{insight.value}</p>

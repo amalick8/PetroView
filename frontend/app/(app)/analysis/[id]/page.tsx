@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { demoAnalysisSummary } from "@/lib/demo-data";
 
 export default function AnalysisDetail() {
 	return (
@@ -14,10 +15,7 @@ export default function AnalysisDetail() {
 				<div className="mt-8 grid gap-6">
 					<Card className="p-6">
 						<h2 className="font-display text-xl text-white">Headline Findings</h2>
-						<p className="mt-2 text-mist/70">
-							Supply concentration remains high with a modest increase in volatility following recent output
-							declines in key producers.
-						</p>
+						<p className="mt-2 text-mist/70">{demoAnalysisSummary}</p>
 					</Card>
 					<Card className="p-6">
 						<h2 className="font-display text-xl text-white">Shock Timeline</h2>

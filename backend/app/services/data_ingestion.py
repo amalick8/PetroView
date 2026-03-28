@@ -43,7 +43,7 @@ def _fetch_fred_api(series_id: str, api_key: str) -> pd.DataFrame:
     if df.empty:
         return df
     df = df.rename(columns={"date": "date", "value": "price"})
-    return df[["date", "price"]]
+    return df.loc[:, ["date", "price"]].copy()
 
 
 def _fetch_fred_csv(series_id: str) -> pd.DataFrame:
@@ -70,7 +70,7 @@ def _clean_price_df(df: pd.DataFrame) -> pd.DataFrame:
             raise ValueError("Missing price column in price data")
         df = df.rename(columns={numeric_cols[0]: "price"})
 
-    df = df[["date", "price"]].copy()
+    df = df.loc[:, ["date", "price"]].copy()
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
     df["price"] = pd.to_numeric(df["price"], errors="coerce")
     df = df.dropna(subset=["date"]).sort_values("date")

@@ -1,4 +1,5 @@
 import logging
+from typing import Any, Dict
 
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
@@ -11,6 +12,7 @@ from app.api.routes.datasets import router as datasets_router
 from app.api.routes.dashboard import router as dashboard_router
 from app.api.routes.forecast import router as forecast_router
 from app.api.routes.notebooks import router as notebooks_router
+from app.api.routes.reports import router as reports_router
 from app.api.routes.health import router as health_router
 from app.core.config import settings
 from app.db.session import init_db
@@ -27,7 +29,7 @@ def create_app() -> FastAPI:
         error_type: str,
         details: object | None = None,
     ) -> JSONResponse:
-        payload = {"error": {"type": error_type, "message": message}}
+        payload: Dict[str, Any] = {"error": {"type": error_type, "message": message}}
         if details is not None:
             payload["error"]["details"] = details
         return JSONResponse(status_code=status_code, content=payload)
@@ -90,6 +92,7 @@ def create_app() -> FastAPI:
     app.include_router(forecast_router, prefix=settings.api_v1_prefix)
     app.include_router(dashboard_router, prefix=settings.api_v1_prefix)
     app.include_router(notebooks_router, prefix=settings.api_v1_prefix)
+    app.include_router(reports_router, prefix=settings.api_v1_prefix)
 
     @app.on_event("startup")
     def on_startup() -> None:

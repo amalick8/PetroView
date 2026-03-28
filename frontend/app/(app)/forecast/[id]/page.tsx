@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { demoForecastMetrics, demoForecastValues } from "@/lib/demo-data";
 
 export default function ForecastDetail() {
 	return (
@@ -14,11 +15,21 @@ export default function ForecastDetail() {
 				<div className="mt-8 grid gap-6">
 					<Card className="p-6">
 						<h2 className="font-display text-xl text-white">Forecast Horizon</h2>
-						<p className="mt-2 text-mist/70">30-day outlook using ARIMA baseline.</p>
+						<p className="mt-2 text-mist/70">{demoForecastMetrics.horizon} using {demoForecastMetrics.model}.</p>
 					</Card>
 					<Card className="p-6">
 						<h2 className="font-display text-xl text-white">Model Metrics</h2>
-						<p className="mt-2 text-mist/70">MAE 2.4 | RMSE 3.1 | MAPE 4.2%</p>
+						<p className="mt-2 text-mist/70">
+							MAE {demoForecastMetrics.mae} | RMSE {demoForecastMetrics.rmse} | MAPE {demoForecastMetrics.mape}%
+						</p>
+					</Card>
+					<Card className="p-6">
+						<h2 className="font-display text-xl text-white">Projected Range</h2>
+						<p className="mt-2 text-mist/70">
+							Next 10 sessions: ${demoForecastValues[0].toFixed(1)} → ${demoForecastValues[
+								demoForecastValues.length - 1
+							].toFixed(1)}
+						</p>
 					</Card>
 				</div>
 			</section>

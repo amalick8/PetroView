@@ -2,19 +2,12 @@
 
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-const sample = [
-  { date: "Jan", value: 0.18 },
-  { date: "Feb", value: 0.22 },
-  { date: "Mar", value: 0.14 },
-  { date: "Apr", value: 0.28 },
-  { date: "May", value: 0.31 },
-  { date: "Jun", value: 0.27 }
-];
+import { demoVolatilitySeries } from "@/lib/demo-data";
 
 export function VolatilityChart() {
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <AreaChart data={sample}>
+      <AreaChart data={demoVolatilitySeries}>
         <XAxis dataKey="date" stroke="#7f8798" fontSize={12} />
         <YAxis stroke="#7f8798" fontSize={12} />
         <Tooltip

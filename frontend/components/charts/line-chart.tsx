@@ -2,19 +2,12 @@
 
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-const sample = [
-  { date: "Jan", price: 78 },
-  { date: "Feb", price: 81 },
-  { date: "Mar", price: 76 },
-  { date: "Apr", price: 85 },
-  { date: "May", price: 89 },
-  { date: "Jun", price: 92 }
-];
+import { demoPriceSeries } from "@/lib/demo-data";
 
 export function PriceTrendChart() {
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <LineChart data={sample}>
+      <LineChart data={demoPriceSeries}>
         <XAxis dataKey="date" stroke="#7f8798" fontSize={12} />
         <YAxis stroke="#7f8798" fontSize={12} />
         <Tooltip

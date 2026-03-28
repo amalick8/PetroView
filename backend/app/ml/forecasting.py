@@ -7,6 +7,10 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error
 from statsmodels.tsa.arima.model import ARIMA
 
 
+def _to_numpy(values: object) -> np.ndarray:
+    return np.asarray(values, dtype=float)
+
+
 def make_lag_features(series: pd.Series, lags: int = 7) -> pd.DataFrame:
     df = pd.DataFrame({"y": series})
     for lag in range(1, lags + 1):
@@ -30,8 +34,8 @@ def forecast_naive(series: pd.Series, horizon: int) -> Tuple[np.ndarray, Dict[st
 
 def forecast_linear(series: pd.Series, horizon: int) -> Tuple[np.ndarray, Dict[str, float]]:
     features = make_lag_features(series)
-    X = features.drop(columns=["y"]).values
-    y = features["y"].values
+    X = features.drop(columns=["y"]).to_numpy(dtype=float)
+    y = features["y"].to_numpy(dtype=float)
 
     split = int(len(X) * 0.8)
     X_train, X_test = X[:split], X[split:]
@@ -40,9 +44,9 @@ def forecast_linear(series: pd.Series, horizon: int) -> Tuple[np.ndarray, Dict[s
     model = LinearRegression()
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
-    metrics = evaluate_forecast(y_test, y_pred)
+    metrics = evaluate_forecast(_to_numpy(y_test), _to_numpy(y_pred))
 
-    last_window = features.drop(columns=["y"]).iloc[-1].values.reshape(1, -1)
+    last_window = features.drop(columns=["y"]).iloc[-1].to_numpy(dtype=float).reshape(1, -1)
     preds = []
     window = last_window.copy()
     for _ in range(horizon):
@@ -61,11 +65,11 @@ def forecast_arima(series: pd.Series, horizon: int) -> Tuple[np.ndarray, Dict[st
     model = ARIMA(train, order=(1, 1, 1))
     fit = model.fit()
     y_pred = fit.forecast(steps=len(test))
-    metrics = evaluate_forecast(test.values, y_pred.values)
+    metrics = evaluate_forecast(_to_numpy(test), _to_numpy(y_pred))
 
     full_model = ARIMA(series, order=(1, 1, 1))
     full_fit = full_model.fit()
-    preds = full_fit.forecast(steps=horizon).values
+    preds = _to_numpy(full_fit.forecast(steps=horizon))
     return preds, metrics
 
 

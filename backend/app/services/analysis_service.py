@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union, cast
 
 import numpy as np
 import pandas as pd
@@ -37,7 +37,7 @@ def load_supply(path: str) -> pd.DataFrame:
 
 def supply_concentration(df_supply: pd.DataFrame, metric: str) -> Dict[str, Any]:
     latest_year = int(df_supply["year"].max())
-    latest = df_supply[df_supply["year"] == latest_year]
+    latest: pd.DataFrame = df_supply.loc[df_supply["year"] == latest_year].copy()
     latest = latest.dropna(subset=[metric])
     latest_group = latest.groupby("country")[metric].sum().sort_values(ascending=False)
     total = float(latest_group.sum())
@@ -65,7 +65,7 @@ def _coerce_price_frame(df: pd.DataFrame) -> pd.DataFrame:
             raise ValueError("Missing price column in price data")
         df = df.rename(columns={numeric_cols[0]: "price"})
 
-    df = df[["date", "price"]].copy()
+    df = df.loc[:, ["date", "price"]].copy()
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
     df["price"] = pd.to_numeric(df["price"], errors="coerce")
     df = df.dropna(subset=["date"]).sort_values("date")
@@ -94,8 +94,11 @@ def run_full_analysis(df: pd.DataFrame) -> Dict[str, Any]:
     numeric_cols = df_norm.select_dtypes(include=["number"]).columns.tolist()
     correlation = None
     if len(numeric_cols) >= 2:
-        corr_df = df_norm[numeric_cols].corr().fillna(0.0)
-        correlation = {col: {k: float(v) for k, v in row.items()} for col, row in corr_df.to_dict().items()}
+        corr_df = df_norm[numeric_cols].corr().fillna(value=0.0)
+        correlation = {
+            str(col): {str(k): float(v) for k, v in row.items()}
+            for col, row in corr_df.to_dict().items()
+        }
 
     dates = [d.strftime("%Y-%m-%d") for d in df_clean.index]
     analysis_payload = {
@@ -137,13 +140,14 @@ def detect_supply_shocks(
         series = df_clean.set_index("date")["price"]
         index = series.index
 
-    pct_change = series.pct_change().replace([np.inf, -np.inf], np.nan)
+    pct_change: pd.Series = series.pct_change().replace([np.inf, -np.inf], np.nan)
     mean = float(pct_change.mean()) if pct_change.notna().any() else 0.0
     std = float(pct_change.std()) if pct_change.notna().any() else 0.0
     if std > 0:
         zscores = (pct_change - mean) / std
     else:
         zscores = pct_change * 0.0
+    zscores = cast(pd.Series, zscores)
 
     shock_mask = (pct_change <= threshold_pct) | (zscores <= -abs(zscore_threshold))
     shocks = []

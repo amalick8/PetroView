@@ -2,17 +2,12 @@
 
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-const sample = [
-  { country: "US", value: 16.8 },
-  { country: "Saudi", value: 12.2 },
-  { country: "Russia", value: 10.4 },
-  { country: "Canada", value: 5.4 }
-];
+import { demoSupplyDistribution } from "@/lib/demo-data";
 
 export function SupplyConcentrationChart() {
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <BarChart data={sample}>
+      <BarChart data={demoSupplyDistribution}>
         <XAxis dataKey="country" stroke="#7f8798" fontSize={12} />
         <YAxis stroke="#7f8798" fontSize={12} />
         <Tooltip

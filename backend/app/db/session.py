@@ -6,6 +6,8 @@ engine = create_engine(settings.database_url, echo=False)
 
 
 def init_db() -> None:
+    if settings.demo_mode:
+        return
     SQLModel.metadata.create_all(engine)
 
 

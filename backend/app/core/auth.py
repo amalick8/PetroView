@@ -12,7 +12,7 @@ def get_bearer_token(authorization: str) -> str:
 
 
 def require_authenticated_user(authorization: str = Header(default="")) -> CurrentUser:
-    if settings.dev_auth_bypass:
+    if settings.demo_mode or settings.dev_auth_bypass:
         return CurrentUser(user_id="dev-user", email=None, claims={})
 
     token = get_bearer_token(authorization)
