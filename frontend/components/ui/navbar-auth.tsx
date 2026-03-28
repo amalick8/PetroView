@@ -1,12 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
-
-const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-const NavbarAuth = dynamic(() => import("@/components/ui/navbar-auth"), { ssr: false });
 
 const navItems = [
   { label: "Dashboard", href: "/dashboard" },
@@ -15,11 +12,7 @@ const navItems = [
   { label: "Settings", href: "/settings" }
 ];
 
-export function Navbar() {
-  if (!DEMO_MODE) {
-    return <NavbarAuth />;
-  }
-
+export default function NavbarAuth() {
   return (
     <nav className="flex items-center justify-between rounded-full border border-white/10 bg-panel/70 px-6 py-3 backdrop-blur-xl">
       <Link href="/" className="font-display text-lg text-white">
@@ -32,14 +25,16 @@ export function Navbar() {
           </Link>
         ))}
       </div>
-      <div className="flex items-center gap-3 text-sm text-mist/70">
-        <span className="hidden text-xs uppercase tracking-[0.2em] text-gold/70 sm:inline">
-          Demo Session
-        </span>
-        <Button variant="outline" size="sm">
-          Demo User
-        </Button>
-      </div>
+      <SignedOut>
+        <SignInButton>
+          <Button variant="outline" size="sm">
+            Sign in
+          </Button>
+        </SignInButton>
+      </SignedOut>
+      <SignedIn>
+        <UserButton appearance={{ elements: { userButtonAvatarBox: "ring-2 ring-gold/40" } }} />
+      </SignedIn>
     </nav>
   );
 }
