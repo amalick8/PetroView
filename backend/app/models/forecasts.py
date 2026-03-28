@@ -11,7 +11,7 @@ class Forecast(TimestampMixin, SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     user_id: str = Field(index=True)
     dataset_id: int = Field(index=True)
-    model_run_id: int = Field(index=True)
+    model_run_id: int = Field(index=True, foreign_key="model_runs.id")
     forecast_horizon: int
     forecast_values_payload: Optional[dict] = Field(default=None, sa_column=Column(JSONB))
     confidence_interval_payload: Optional[dict] = Field(default=None, sa_column=Column(JSONB))

@@ -10,7 +10,7 @@ from app.models.base import TimestampMixin
 class Analysis(TimestampMixin, SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     user_id: str = Field(index=True)
-    dataset_id: int = Field(index=True)
+    dataset_id: int = Field(index=True, foreign_key="datasets.id")
     title: str
     summary: Optional[str] = None
     insight_payload: Optional[dict] = Field(default=None, sa_column=Column(JSONB))

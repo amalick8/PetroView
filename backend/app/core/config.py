@@ -12,7 +12,12 @@ class Settings(BaseSettings):
     # Auth (Clerk)
     clerk_jwks_url: str = ""
     clerk_issuer: str = ""
-    dev_auth_bypass: bool = True
+    clerk_audience: str = ""
+    dev_auth_bypass: bool = False
+
+    # Supabase
+    supabase_url: str = ""
+    supabase_service_role_key: str = ""
 
     # Data and storage
     data_dir: str = "./data"

@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import desc
 from sqlmodel import Session
 
-from app.api.deps import get_current_user_id, get_db
+from app.api.deps import get_current_user, get_db
 from app.models.analysis import Analysis
+from app.schemas.auth import CurrentUser
 from app.schemas.dashboard import DashboardOverview
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
@@ -10,13 +12,13 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
 @router.get("/overview", response_model=DashboardOverview)
 def dashboard_overview(
-    user_id: str = Depends(get_current_user_id),
+    current_user: CurrentUser = Depends(get_current_user),
     session: Session = Depends(get_db),
 ) -> DashboardOverview:
     analysis = (
         session.query(Analysis)
-        .filter(Analysis.user_id == user_id)
-        .order_by(Analysis.created_at.desc())
+        .filter(Analysis.user_id == current_user.user_id)
+        .order_by(desc(Analysis.created_at))
         .first()
     )
 

@@ -34,9 +34,9 @@ def verify_clerk_jwt(token: str) -> dict:
             token,
             key,
             algorithms=["RS256"],
-            audience=None,
+            audience=settings.clerk_audience or None,
             issuer=settings.clerk_issuer or None,
-            options={"verify_aud": False},
+            options={"verify_aud": bool(settings.clerk_audience)},
         )
     except JWTError as exc:
         raise AuthError("Invalid token") from exc

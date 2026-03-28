@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Any, Dict
 
 import numpy as np
 import pandas as pd
@@ -7,7 +7,7 @@ from app.ml.forecasting import forecast_arima, forecast_linear, forecast_naive, 
 from app.services.analysis_service import load_prices
 
 
-def run_forecast(price_path: str, horizon: int) -> Dict[str, Dict]:
+def run_forecast(price_path: str, horizon: int) -> Dict[str, Any]:
     df_prices = load_prices(price_path)
     series = df_prices["price"].dropna()
 

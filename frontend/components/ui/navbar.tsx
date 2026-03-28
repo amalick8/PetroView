@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 import { Button } from "@/components/ui/button";
 
@@ -22,9 +23,16 @@ export function Navbar() {
           </Link>
         ))}
       </div>
-      <Button variant="outline" size="sm">
-        Sign in
-      </Button>
+      <SignedOut>
+        <SignInButton>
+          <Button variant="outline" size="sm">
+            Sign in
+          </Button>
+        </SignInButton>
+      </SignedOut>
+      <SignedIn>
+        <UserButton appearance={{ elements: { userButtonAvatarBox: "ring-2 ring-gold/40" } }} />
+      </SignedIn>
     </nav>
   );
 }

@@ -1,11 +1,11 @@
 from typing import Generator
 
-from fastapi import Depends, Header, HTTPException, status
+from fastapi import Depends
 from sqlmodel import Session
 
-from app.core.config import settings
-from app.core.security import AuthError, extract_user_id, verify_clerk_jwt
+from app.core.auth import require_authenticated_user
 from app.db.session import get_session
+from app.schemas.auth import CurrentUser
 
 
 def get_db() -> Generator[Session, None, None]:
@@ -13,20 +13,9 @@ def get_db() -> Generator[Session, None, None]:
         yield session
 
 
-def get_current_user_id(authorization: str = Header(default="")) -> str:
-    if settings.dev_auth_bypass:
-        return "dev-user"
+def get_current_user(current_user: CurrentUser = Depends(require_authenticated_user)) -> CurrentUser:
+    return current_user
 
-    if not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing token")
-    token = authorization.replace("Bearer ", "", 1).strip()
-    try:
-        payload = verify_clerk_jwt(token)
-        user_id = extract_user_id(payload)
-    except AuthError as exc:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=exc.message) from exc
 
-    if not user_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
-
-    return user_id
+def get_current_user_id(current_user: CurrentUser = Depends(get_current_user)) -> str:
+    return current_user.user_id

@@ -1,63 +1,42 @@
 # PetroView
 
-**AI-powered energy intelligence and predictive analytics platform for global oil markets.**
+**Energy intelligence and predictive analytics for global oil markets.**
 
-PetroView is now a full-stack product with a FastAPI backend, PostgreSQL persistence, and a premium Next.js analytics UI.
+PetroView is a full-stack platform that ingests real-world energy data, analyzes market dynamics, and produces forecasts and reports through a modern analytics UI.
 
-## Architecture
+## What is included
 
-- **Frontend:** Next.js (App Router), TypeScript, Tailwind, Framer Motion, Recharts
-- **Backend:** FastAPI, SQLModel, pandas, statsmodels, scikit-learn, nbformat
-- **Data Sources:** FRED (WTI spot price) and OWID energy data
+- FastAPI backend for data ingestion, analysis, and forecasting
+- Next.js frontend for dashboards, reports, and market insights
+- Data utilities, notebooks, and model pipelines for experimentation
 
-## Repository Structure
+## High-level architecture
+
+- **Frontend:** Next.js (App Router), TypeScript, Tailwind, Recharts
+- **Backend:** FastAPI, SQLModel, pandas, statsmodels, scikit-learn
+- **Data sources:** FRED (WTI spot price) and OWID energy data
+
+## Repository layout
 
 ```
 PetroView/
-├── backend/
-│   ├── app/
-│   ├── data/
-│   ├── requirements.txt
-│   └── .env.example
-├── frontend/
-│   ├── app/
-│   ├── components/
-│   ├── package.json
-│   └── .env.example
+├── backend/   # API, data pipelines, ML, and services
+├── frontend/  # Web UI
+├── oilwatch/  # Local data and notebooks
 └── README.md
 ```
 
-## Backend Quickstart
+## Getting started
 
-```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-uvicorn app.main:app --reload
-```
+Follow the README files inside each app for environment setup and run commands:
 
-## Frontend Quickstart
+- Backend: [backend/README.md](backend/README.md)
+- Frontend: [frontend/README.md](frontend/README.md)
 
-```bash
-cd frontend
-npm install
-cp .env.example .env.local
-npm run dev
-```
+## Key capabilities
 
-## Core Features
-
-- Real-world data ingestion (WTI pricing + OWID supply)
-- Cleaning, validation, and structured storage
+- Data ingestion and validation for market time series
 - Statistical analysis and supply shock detection
 - Multi-model forecasting (naive, regression, ARIMA)
 - Notebook report generation
-- Premium analytics UI for dashboards and reports
-
-## Next Steps
-
-- Add Clerk auth wiring in frontend
-- Configure database migrations with Alembic
-- Connect frontend charts to live API data
+- Interactive dashboards and reports
