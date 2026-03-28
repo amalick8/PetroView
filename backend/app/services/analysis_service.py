@@ -6,6 +6,19 @@ import pandas as pd
 from app.utils.dataframe import normalize_columns, rolling_volatility, summarize_missing
 
 
+def get_supply_metric(df_supply: pd.DataFrame) -> str:
+    candidates = [
+        "oil_production",
+        "oil_production_per_day",
+        "oil_prod",
+        "oil_production_mt",
+    ]
+    for col in candidates:
+        if col in df_supply.columns:
+            return col
+    raise ValueError("No supply production metric found")
+
+
 def load_prices(path: str) -> pd.DataFrame:
     df = pd.read_csv(path)
     df = normalize_columns(df)
@@ -22,7 +35,7 @@ def load_supply(path: str) -> pd.DataFrame:
     return df
 
 
-def supply_concentration(df_supply: pd.DataFrame, metric: str = "oil_production") -> Dict[str, float]:
+def supply_concentration(df_supply: pd.DataFrame, metric: str) -> Dict[str, float]:
     latest_year = int(df_supply["year"].max())
     latest = df_supply[df_supply["year"] == latest_year]
     latest = latest.dropna(subset=[metric])
@@ -39,7 +52,13 @@ def detect_supply_shocks(series: pd.Series, threshold_pct: float = -0.1) -> List
     shock_idx = pct_change[pct_change <= threshold_pct].index
     shocks = []
     for idx in shock_idx:
-        shocks.append({"index": int(idx), "pct_change": float(pct_change.loc[idx])})
+        shocks.append(
+            {
+                "year": float(idx),
+                "pct_change": float(pct_change.loc[idx]),
+                "value": float(series.loc[idx]),
+            }
+        )
     return shocks
 
 
@@ -67,10 +86,13 @@ def build_analysis(price_path: str, supply_path: str) -> Tuple[Dict, Dict, Dict]
     df_prices = load_prices(price_path)
     df_supply = load_supply(supply_path)
 
-    price_summary = analyze_prices(df_prices)
-    concentration = supply_concentration(df_supply)
+    metric = get_supply_metric(df_supply)
+    supply_yearly = df_supply.groupby("year")[metric].sum().sort_index()
 
-    shocks = detect_supply_shocks(df_supply["oil_production"].fillna(0))
+    price_summary = analyze_prices(df_prices)
+    concentration = supply_concentration(df_supply, metric)
+
+    shocks = detect_supply_shocks(supply_yearly.fillna(0))
 
     metrics_payload = {
         "price": price_summary,

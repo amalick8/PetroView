@@ -1,0 +1,32 @@
+"use client";
+
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
+const sample = [
+  { date: "Jan", price: 78 },
+  { date: "Feb", price: 81 },
+  { date: "Mar", price: 76 },
+  { date: "Apr", price: 85 },
+  { date: "May", price: 89 },
+  { date: "Jun", price: 92 }
+];
+
+export function PriceTrendChart() {
+  return (
+    <ResponsiveContainer width="100%" height={220}>
+      <LineChart data={sample}>
+        <XAxis dataKey="date" stroke="#7f8798" fontSize={12} />
+        <YAxis stroke="#7f8798" fontSize={12} />
+        <Tooltip
+          contentStyle={{
+            background: "#141821",
+            border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 12
+          }}
+          labelStyle={{ color: "#f5c46a" }}
+        />
+        <Line type="monotone" dataKey="price" stroke="#f5c46a" strokeWidth={2} dot={false} />
+      </LineChart>
+    </ResponsiveContainer>
+  );
+}

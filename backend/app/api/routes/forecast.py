@@ -20,6 +20,8 @@ def run_forecast_route(
     dataset = session.get(Dataset, request.dataset_id)
     if not dataset or dataset.user_id != user_id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Dataset not found")
+    if dataset.source_name != "wti_prices":
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Forecast requires WTI price dataset")
 
     forecast_result = run_forecast(dataset.storage_path, request.horizon_days)
     model_name = forecast_result["forecast"]["model"]
