@@ -1,0 +1,65 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlmodel import Session
+
+from app.api.deps import get_current_user_id, get_db
+from app.models.datasets import Dataset
+from app.models.forecasts import Forecast
+from app.models.model_runs import ModelRun
+from app.schemas.forecast import ForecastRead, ForecastRunRequest
+from app.services.forecast_service import run_forecast
+
+router = APIRouter(prefix="/forecast", tags=["forecast"])
+
+
+@router.post("/run", response_model=ForecastRead)
+def run_forecast_route(
+    request: ForecastRunRequest,
+    user_id: str = Depends(get_current_user_id),
+    session: Session = Depends(get_db),
+) -> ForecastRead:
+    dataset = session.get(Dataset, request.dataset_id)
+    if not dataset or dataset.user_id != user_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Dataset not found")
+
+    forecast_result = run_forecast(dataset.storage_path, request.horizon_days)
+    model_name = forecast_result["forecast"]["model"]
+
+    model_run = ModelRun(
+        user_id=user_id,
+        dataset_id=dataset.id,
+        analysis_id=request.analysis_id,
+        model_name=model_name,
+        model_version="1.0",
+        parameters_payload={"horizon_days": request.horizon_days},
+        metrics_payload=forecast_result["metrics"],
+    )
+    session.add(model_run)
+    session.commit()
+    session.refresh(model_run)
+
+    forecast = Forecast(
+        user_id=user_id,
+        dataset_id=dataset.id,
+        model_run_id=model_run.id,
+        forecast_horizon=request.horizon_days,
+        forecast_values_payload=forecast_result["forecast"],
+        confidence_interval_payload=forecast_result["confidence"],
+        narrative_summary="",
+    )
+    session.add(forecast)
+    session.commit()
+    session.refresh(forecast)
+
+    return forecast
+
+
+@router.get("/{forecast_id}", response_model=ForecastRead)
+def get_forecast(
+    forecast_id: int,
+    user_id: str = Depends(get_current_user_id),
+    session: Session = Depends(get_db),
+) -> ForecastRead:
+    forecast = session.get(Forecast, forecast_id)
+    if not forecast or forecast.user_id != user_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Forecast not found")
+    return forecast
