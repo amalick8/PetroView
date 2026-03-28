@@ -1,25 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import dynamic from "next/dynamic";
 
-import { Button } from "@/components/ui/button";
+"use client";
 
-const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-const NavbarAuth = dynamic(() => import("@/components/ui/navbar-auth"), { ssr: false });
+import Link from "next/link";
 
 const navItems = [
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Datasets", href: "/datasets" },
-  { label: "Reports", href: "/reports/1" },
-  { label: "Settings", href: "/settings" }
+  { label: "Overview", href: "/" },
+  { label: "Forecast", href: "/forecast" },
+  { label: "Volatility", href: "/volatility" },
+  { label: "News", href: "/news" },
+  { label: "Report", href: "/report" },
+  { label: "Methodology", href: "/methodology" }
 ];
 
 export function Navbar() {
-  if (!DEMO_MODE) {
-    return <NavbarAuth />;
-  }
-
   return (
     <nav className="flex items-center justify-between rounded-full border border-white/10 bg-panel/70 px-6 py-3 backdrop-blur-xl">
       <Link href="/" className="font-display text-lg text-white">
@@ -32,14 +28,7 @@ export function Navbar() {
           </Link>
         ))}
       </div>
-      <div className="flex items-center gap-3 text-sm text-mist/70">
-        <span className="hidden text-xs uppercase tracking-[0.2em] text-gold/70 sm:inline">
-          Demo Session
-        </span>
-        <Button variant="outline" size="sm">
-          Demo User
-        </Button>
-      </div>
+      <div className="text-xs uppercase tracking-[0.25em] text-gold/70">Public Intelligence</div>
     </nav>
   );
 }

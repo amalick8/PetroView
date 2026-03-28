@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     api_v1_prefix: str = "/api/v1"
     environment: str = "development"
     demo_mode: bool = False
+    public_user_id: str = "public"
 
     # Database
     database_url: str = "postgresql+psycopg://postgres:postgres@localhost:5432/petroview"

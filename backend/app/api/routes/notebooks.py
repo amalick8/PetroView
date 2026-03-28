@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_db
 from app.core.config import settings
 from app.models.analysis import Analysis
 from app.models.datasets import Dataset
 from app.models.notebooks import Notebook
-from app.schemas.auth import CurrentUser
 from app.schemas.notebooks import NotebookGenerateRequest, NotebookGenerateResponse
 from app.services.notebook_service import generate_notebook
 from app.services import demo_service
@@ -17,11 +16,10 @@ router = APIRouter(prefix="/notebooks", tags=["notebooks"])
 @router.post("/generate", response_model=NotebookGenerateResponse)
 def generate_report(
     request: NotebookGenerateRequest,
-    current_user: CurrentUser = Depends(get_current_user),
     session: Session = Depends(get_db),
 ) -> NotebookGenerateResponse:
     if settings.demo_mode:
-        report = demo_service.create_report(request.analysis_id, current_user.user_id)
+        report = demo_service.create_report(request.analysis_id)
         return NotebookGenerateResponse(
             status="ok",
             notebook_id=report["id"],
@@ -31,14 +29,10 @@ def generate_report(
     analysis = session.get(Analysis, request.analysis_id)
     if not analysis:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Analysis not found")
-    if analysis.user_id != current_user.user_id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
     dataset = session.get(Dataset, analysis.dataset_id)
     if not dataset:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Dataset not found")
-    if dataset.user_id != current_user.user_id:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
     if analysis.id is None or dataset.id is None:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Missing record ids")
@@ -59,7 +53,7 @@ def generate_report(
     notebook_path = generate_notebook(payload, output_path)
 
     notebook = Notebook(
-        user_id=current_user.user_id,
+        user_id=settings.public_user_id,
         dataset_id=dataset.id,
         analysis_id=analysis.id,
         notebook_path=notebook_path,

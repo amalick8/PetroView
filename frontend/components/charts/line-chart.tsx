@@ -4,10 +4,12 @@ import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "rec
 
 import { demoPriceSeries } from "@/lib/demo-data";
 
-export function PriceTrendChart() {
+type PricePoint = { date: string; price: number };
+
+export function PriceTrendChart({ data = demoPriceSeries }: { data?: PricePoint[] }) {
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <LineChart data={demoPriceSeries}>
+      <LineChart data={data}>
         <XAxis dataKey="date" stroke="#7f8798" fontSize={12} />
         <YAxis stroke="#7f8798" fontSize={12} />
         <Tooltip

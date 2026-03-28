@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, Iterable, List
 
 import numpy as np
 import pandas as pd
@@ -9,11 +9,16 @@ from app.services.analysis_service import load_prices
 
 def run_forecast(price_path: str, horizon: int) -> Dict[str, Any]:
     df_prices = load_prices(price_path)
-    series = df_prices["price"].dropna()
+    return run_forecast_bundle(df_prices, horizons=[horizon])
 
-    naive_preds, naive_metrics = forecast_naive(series, horizon)
-    linear_preds, linear_metrics = forecast_linear(series, horizon)
-    arima_preds, arima_metrics = forecast_arima(series, horizon)
+
+def run_forecast_bundle(df_prices: pd.DataFrame, horizons: Iterable[int]) -> Dict[str, Any]:
+    series = df_prices["price"].dropna()
+    horizons_list = list(horizons)
+
+    naive_preds, naive_metrics = forecast_naive(series, max(horizons_list))
+    linear_preds, linear_metrics = forecast_linear(series, max(horizons_list))
+    arima_preds, arima_metrics = forecast_arima(series, max(horizons_list))
 
     metrics_map = {
         "naive": naive_metrics,
@@ -30,18 +35,32 @@ def run_forecast(price_path: str, horizon: int) -> Dict[str, Any]:
     best_preds = preds_map[best_model]
 
     last_date = df_prices["date"].iloc[-1]
-    future_dates = pd.date_range(last_date, periods=horizon + 1, inclusive="right")
+    forecast_horizons: List[Dict[str, Any]] = []
+    for horizon in horizons_list:
+        future_dates = pd.date_range(last_date, periods=horizon + 1, inclusive="right")
+        sliced = best_preds[:horizon]
+        ci_width = float(np.std(sliced)) if len(sliced) > 1 else 0.0
+        forecast_horizons.append(
+            {
+                "horizon_days": horizon,
+                "model": best_model,
+                "dates": [d.strftime("%Y-%m-%d") for d in future_dates],
+                "values": [float(v) for v in sliced],
+                "lower": [float(v - ci_width) for v in sliced],
+                "upper": [float(v + ci_width) for v in sliced],
+            }
+        )
 
-    forecast_payload = {
-        "model": best_model,
-        "dates": [d.strftime("%Y-%m-%d") for d in future_dates],
-        "values": [float(v) for v in best_preds],
+    direction = "bullish" if float(best_preds[-1] - best_preds[0]) >= 0 else "bearish"
+    confidence = float(max(0.1, min(0.9, 1 - float(np.std(best_preds)))))
+
+    model_comparison = [
+        {"model": name, **metrics_map[name]} for name in metrics_map.keys()
+    ]
+
+    return {
+        "direction": direction,
+        "confidence": confidence,
+        "horizons": forecast_horizons,
+        "model_comparison": model_comparison,
     }
-
-    ci_width = float(np.std(best_preds)) if len(best_preds) > 1 else 0.0
-    confidence_payload = {
-        "lower": [float(v - ci_width) for v in best_preds],
-        "upper": [float(v + ci_width) for v in best_preds],
-    }
-
-    return {"forecast": forecast_payload, "metrics": metrics_map, "confidence": confidence_payload}

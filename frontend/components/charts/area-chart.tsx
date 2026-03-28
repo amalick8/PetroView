@@ -4,10 +4,12 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "rec
 
 import { demoVolatilitySeries } from "@/lib/demo-data";
 
-export function VolatilityChart() {
+type VolPoint = { date: string; value: number };
+
+export function VolatilityChart({ data = demoVolatilitySeries }: { data?: VolPoint[] }) {
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <AreaChart data={demoVolatilitySeries}>
+      <AreaChart data={data}>
         <XAxis dataKey="date" stroke="#7f8798" fontSize={12} />
         <YAxis stroke="#7f8798" fontSize={12} />
         <Tooltip

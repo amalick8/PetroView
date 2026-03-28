@@ -12,23 +12,10 @@ export const metadata: Metadata = {
   description: "AI-powered energy intelligence and predictive analytics for oil markets."
 };
 
-const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
-
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  if (DEMO_MODE) {
-    return (
-      <html lang="en" className={`${display.variable} ${body.variable}`}>
-        <body>{children}</body>
-      </html>
-    );
-  }
-
-  const { ClerkProvider } = await import("@clerk/nextjs");
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
-      <ClerkProvider>
-        <body>{children}</body>
-      </ClerkProvider>
+      <body>{children}</body>
     </html>
   );
 }

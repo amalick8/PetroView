@@ -68,7 +68,7 @@ def dashboard_recent() -> Dict[str, Any]:
     }
 
 
-def create_analysis(dataset_id: int, title: str, user_id: str) -> Dict[str, Any]:
+def create_analysis(dataset_id: int, title: str, user_id: str = "public") -> Dict[str, Any]:
     global _DEMO_ANALYSIS_ID
 
     analysis = {
@@ -119,7 +119,12 @@ def get_analysis(analysis_id: int) -> Optional[Dict[str, Any]]:
     return _DEMO_ANALYSES.get(analysis_id)
 
 
-def create_forecast(dataset_id: int, horizon: int, user_id: str, analysis_id: Optional[int] = None) -> Dict[str, Any]:
+def create_forecast(
+    dataset_id: int,
+    horizon: int,
+    analysis_id: Optional[int] = None,
+    user_id: str = "public",
+) -> Dict[str, Any]:
     global _DEMO_FORECAST_ID
 
     dates = _date_series(horizon, start_offset=0)
@@ -151,7 +156,20 @@ def get_forecast(forecast_id: int) -> Optional[Dict[str, Any]]:
     return _DEMO_FORECASTS.get(forecast_id)
 
 
-def create_report(analysis_id: int, user_id: str) -> Dict[str, Any]:
+def get_latest_forecast() -> Dict[str, Any]:
+    if _DEMO_FORECASTS:
+        latest_id = max(_DEMO_FORECASTS.keys())
+        return _DEMO_FORECASTS[latest_id]
+    return create_forecast(dataset_id=1, horizon=30)
+
+
+def get_forecast_history() -> List[Dict[str, Any]]:
+    if not _DEMO_FORECASTS:
+        return [create_forecast(dataset_id=1, horizon=30)]
+    return [forecast for _, forecast in sorted(_DEMO_FORECASTS.items(), reverse=True)][:5]
+
+
+def create_report(analysis_id: int, user_id: str = "public") -> Dict[str, Any]:
     global _DEMO_REPORT_ID
 
     report = {
@@ -170,3 +188,10 @@ def create_report(analysis_id: int, user_id: str) -> Dict[str, Any]:
 
 def get_report(report_id: int) -> Optional[Dict[str, Any]]:
     return _DEMO_REPORTS.get(report_id)
+
+
+def get_latest_report() -> Dict[str, Any]:
+    if _DEMO_REPORTS:
+        latest_id = max(_DEMO_REPORTS.keys())
+        return _DEMO_REPORTS[latest_id]
+    return create_report(_DEMO_REPORT_ID)

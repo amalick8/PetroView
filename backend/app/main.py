@@ -7,12 +7,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.api.routes.analysis import router as analysis_router
-from app.api.routes.auth import router as auth_router
 from app.api.routes.datasets import router as datasets_router
 from app.api.routes.dashboard import router as dashboard_router
 from app.api.routes.forecast import router as forecast_router
+from app.api.routes.intelligence import router as intelligence_router
+from app.api.routes.news import router as news_router
 from app.api.routes.notebooks import router as notebooks_router
+from app.api.routes.public_report import router as public_report_router
 from app.api.routes.reports import router as reports_router
+from app.api.routes.signals import router as signals_router
+from app.api.routes.volatility import router as volatility_router
 from app.api.routes.health import router as health_router
 from app.core.config import settings
 from app.db.session import init_db
@@ -86,13 +90,17 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(health_router, prefix=settings.api_v1_prefix)
-    app.include_router(auth_router, prefix=settings.api_v1_prefix)
     app.include_router(datasets_router, prefix=settings.api_v1_prefix)
     app.include_router(analysis_router, prefix=settings.api_v1_prefix)
     app.include_router(forecast_router, prefix=settings.api_v1_prefix)
+    app.include_router(intelligence_router, prefix=settings.api_v1_prefix)
+    app.include_router(news_router, prefix=settings.api_v1_prefix)
     app.include_router(dashboard_router, prefix=settings.api_v1_prefix)
     app.include_router(notebooks_router, prefix=settings.api_v1_prefix)
+    app.include_router(public_report_router, prefix=settings.api_v1_prefix)
     app.include_router(reports_router, prefix=settings.api_v1_prefix)
+    app.include_router(signals_router, prefix=settings.api_v1_prefix)
+    app.include_router(volatility_router, prefix=settings.api_v1_prefix)
 
     @app.on_event("startup")
     def on_startup() -> None:

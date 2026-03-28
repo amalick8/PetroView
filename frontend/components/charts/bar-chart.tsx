@@ -4,10 +4,12 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recha
 
 import { demoSupplyDistribution } from "@/lib/demo-data";
 
-export function SupplyConcentrationChart() {
+type SupplyPoint = { country: string; value: number };
+
+export function SupplyConcentrationChart({ data = demoSupplyDistribution }: { data?: SupplyPoint[] }) {
   return (
     <ResponsiveContainer width="100%" height={220}>
-      <BarChart data={demoSupplyDistribution}>
+      <BarChart data={data}>
         <XAxis dataKey="country" stroke="#7f8798" fontSize={12} />
         <YAxis stroke="#7f8798" fontSize={12} />
         <Tooltip
