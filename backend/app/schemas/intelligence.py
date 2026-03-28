@@ -27,7 +27,7 @@ class ForecastBundle(BaseModel):
     rmse: Optional[float] = None
     forecast: Optional[List[float]] = None
     confidence_interval: Optional[List[Dict[str, float]]] = None
-    feature_importance: Optional[List[Dict[str, float]]] = None
+    feature_importance: Optional[List[Dict[str, float | str]]] = None
     explanations: Optional[List[str]] = None
     horizons: List[ForecastHorizon]
     model_comparison: List[ForecastComparison]

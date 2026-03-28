@@ -1,5 +1,8 @@
 export type IntelligenceSummary = {
   timestamp: string;
+  price_series: { date: string; price: number }[];
+  supply_distribution: { country: string; value: number }[];
+  shock_timeline: { date: string; return: number; price: number }[];
   scanner: {
     latest_price: number;
     return_7d: number;

@@ -45,7 +45,7 @@ export function PriceForecastChart({ actual, forecast }: { actual: PricePoint[];
           dataKey="upper"
           stroke="none"
           fill="rgba(31,111,235,0.18)"
-          baseLine={(data) => data.lower}
+          baseLine={(data) => data.lower ?? data.upper ?? 0}
           connectNulls
         />
         <Line dataKey="price" type="monotone" stroke="#f5c46a" strokeWidth={2} dot={false} />

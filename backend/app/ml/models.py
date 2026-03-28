@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import numpy as np
 import pandas as pd
@@ -22,12 +22,15 @@ def _prediction_interval(values: np.ndarray, sigma: float) -> Dict[str, np.ndarr
     return {"lower": lower, "upper": upper}
 
 
+ModelOutput = Dict[str, Union[np.ndarray, Dict[str, float], None]]
+
+
 def naive_model(
     train_df: pd.DataFrame,
     test_df: pd.DataFrame,
     full_series: pd.Series,
     horizon: int,
-) -> Dict[str, np.ndarray]:
+) -> ModelOutput:
     y_true = test_df["target"].to_numpy(dtype=float)
     y_pred = test_df["lag_1"].to_numpy(dtype=float)
     residuals = y_true - y_pred
@@ -51,7 +54,7 @@ def linear_regression_model(
     test_df: pd.DataFrame,
     full_prices: pd.DataFrame,
     horizon: int,
-) -> Dict[str, np.ndarray | Dict[str, float] | None]:
+) -> ModelOutput:
     feature_cols = get_feature_columns(train_df)
     X_train = train_df[feature_cols].to_numpy(dtype=float)
     y_train = train_df["target"].to_numpy(dtype=float)
@@ -85,7 +88,7 @@ def gradient_boosting_model(
     test_df: pd.DataFrame,
     full_prices: pd.DataFrame,
     horizon: int,
-) -> Dict[str, np.ndarray | Dict[str, float] | None]:
+) -> ModelOutput:
     feature_cols = get_feature_columns(train_df)
     X_train = train_df[feature_cols].to_numpy(dtype=float)
     y_train = train_df["target"].to_numpy(dtype=float)
@@ -121,7 +124,7 @@ def arima_model(
     series: pd.Series,
     test_size: float,
     horizon: int,
-) -> Dict[str, np.ndarray | Dict[str, float] | None]:
+) -> ModelOutput:
     split_idx = int(len(series) * (1 - test_size))
     split_idx = min(max(split_idx, 10), len(series) - 1)
     train, test = series.iloc[:split_idx], series.iloc[split_idx:]

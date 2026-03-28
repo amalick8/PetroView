@@ -126,7 +126,7 @@ def _select_default_horizon(horizons: List[Dict[str, Any]]) -> Dict[str, Any]:
     return horizons[0]
 
 
-def _format_feature_importance(raw: Optional[Dict[str, float]]) -> List[Dict[str, float]]:
+def _format_feature_importance(raw: Optional[Dict[str, float]]) -> List[Dict[str, float | str]]:
     if not raw:
         return []
     ordered = sorted(raw.items(), key=lambda item: abs(item[1]), reverse=True)
