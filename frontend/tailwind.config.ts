@@ -5,25 +5,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0b0d12",
-        slate: "#141821",
-        panel: "#191e27",
-        mist: "#d9dee7",
-        gold: "#f5c46a",
-        ember: "#f08b65",
-        ocean: "#1f6feb"
+        ink: "rgb(var(--ink) / <alpha-value>)",
+        slate: "rgb(var(--slate) / <alpha-value>)",
+        panel: "rgb(var(--panel) / <alpha-value>)",
+        mist: "rgb(var(--mist) / <alpha-value>)",
+        gold: "rgb(var(--gold) / <alpha-value>)",
+        ember: "rgb(var(--ember) / <alpha-value>)",
+        ocean: "rgb(var(--ocean) / <alpha-value>)"
       },
       fontFamily: {
-        display: ["'Space Grotesk'", "sans-serif"],
-        body: ["'IBM Plex Sans'", "sans-serif"]
+        display: ["var(--display-font)", "sans-serif"],
+        body: ["var(--body-font)", "sans-serif"]
       },
       boxShadow: {
-        glass: "0 20px 60px rgba(0,0,0,0.4)",
-        inset: "inset 0 0 0 1px rgba(255,255,255,0.05)"
+        glass: "0 30px 80px rgba(27,23,16,0.18)",
+        inset: "inset 0 0 0 1px rgba(27,23,16,0.08)"
       },
       backgroundImage: {
-        "hero-gradient": "radial-gradient(circle at top, rgba(31,111,235,0.25), transparent 55%), radial-gradient(circle at 20% 20%, rgba(245,196,106,0.25), transparent 45%)",
-        "panel-gradient": "linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01))"
+        "hero-gradient": "radial-gradient(circle at 20% 10%, rgba(var(--gold),0.35), transparent 55%), radial-gradient(circle at 85% 12%, rgba(var(--ocean),0.28), transparent 45%)",
+        "panel-gradient": "linear-gradient(135deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55))"
       }
     }
   },

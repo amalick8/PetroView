@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { demoSupplyDistribution } from "@/lib/demo-data";
 
@@ -10,17 +10,18 @@ export function SupplyConcentrationChart({ data = demoSupplyDistribution }: { da
   return (
     <ResponsiveContainer width="100%" height={220}>
       <BarChart data={data}>
-        <XAxis dataKey="country" stroke="#7f8798" fontSize={12} />
-        <YAxis stroke="#7f8798" fontSize={12} />
+        <CartesianGrid stroke="rgba(var(--ink),0.08)" strokeDasharray="3 3" vertical={false} />
+        <XAxis dataKey="country" stroke="rgba(var(--ink),0.6)" fontSize={12} />
+        <YAxis stroke="rgba(var(--ink),0.6)" fontSize={12} />
         <Tooltip
           contentStyle={{
-            background: "#141821",
-            border: "1px solid rgba(255,255,255,0.1)",
+            background: "rgb(var(--panel))",
+            border: "1px solid rgba(var(--ink),0.1)",
             borderRadius: 12
           }}
-          labelStyle={{ color: "#f5c46a" }}
+          labelStyle={{ color: "rgb(var(--ink))" }}
         />
-        <Bar dataKey="value" fill="#f08b65" radius={[8, 8, 0, 0]} />
+        <Bar dataKey="value" fill="rgb(var(--gold))" radius={[8, 8, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );

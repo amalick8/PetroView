@@ -1,30 +1,42 @@
 # PetroView
 
-**Global energy intelligence and predictive analytics for the oil market.**
+**Global energy intelligence for a volatile world.**
 
-PetroView is a full-stack platform that turns raw, real-world energy signals into usable market intelligence. It ingests global oil indicators, normalizes and validates time series, runs statistical analysis and forecasting pipelines, and presents results through a modern analytics UI. The goal is not just charts, but decision-grade context that connects price, production, demand, and macro conditions across regions and time.
+PetroView is a full-stack platform that turns global oil market signals into clear, decision-grade context. It blends time series data, macro indicators, and market structure analytics to help teams understand what is changing, where pressure is building, and why it matters. The focus is on narrative clarity and cross-region visibility, not just charts.
 
-## Why this project matters (global scope)
+## Purpose
 
-Oil is still the backbone of modern energy systems. It powers transportation, underpins petrochemical supply chains, and influences inflation, trade balances, and national security. Price shocks ripple through economies, and supply disruptions can alter industrial output worldwide. That makes transparent, timely energy analytics a public and private priority.
+Oil is still the backbone of modern energy systems. It powers transportation, anchors petrochemical supply chains, and influences inflation, trade balances, and national security. When prices move or supply is disrupted, the effects ripple across industries and regions.
 
-PetroView is designed to operate at this global scale. It focuses on:
+PetroView exists to make those dynamics visible and actionable. It is built for analysts, operators, and decision makers who need a consistent, global view of the market with enough context to interpret shifts confidently.
 
-- **Cross-region visibility.** Production and price signals are not local. A supply change in one region can drive global price movements within days.
-- **Policy and macro context.** Oil is intertwined with inflation, interest rates, and trade flows. The platform places market shifts in macroeconomic context.
-- **Risk awareness.** Supply shocks, demand contractions, and geopolitical events can change market regimes quickly. Forecasting needs to be robust and explainable.
-- **Accessible intelligence.** Analysts, operators, and decision makers need consistent, comparable datasets and a shared view of the market.
+## Global conflicts and market risk
 
-This is why PetroView prioritizes data quality, reproducible analysis, and a clear narrative around what is changing and why. It is intended to be a trusted lens on the global oil market, rather than a single model output.
+Oil markets are shaped by events far beyond supply and demand curves. PetroView is designed to surface those pressures at a high level, including:
 
-## What is included
+- **Geopolitical conflicts and sanctions** that disrupt exports, reroute flows, and change pricing power.
+- **Shipping chokepoints and maritime risk** that impact transit times and regional inventory.
+- **Regional instability and infrastructure outages** that shift production and storage capacity.
+- **Policy shifts and strategic releases** that compress or amplify volatility.
 
-- FastAPI backend for data ingestion, analysis, and forecasting
-- Next.js frontend for dashboards, reports, and market insights
-- Data utilities, notebooks, and model pipelines for experimentation
-- Structured schemas and services to keep analytics consistent across the stack
+The goal is to make conflict-driven dynamics visible and comparable across time so users can connect events to price behavior and risk regimes.
 
-## High-level architecture
+## What PetroView delivers
+
+- A consistent pipeline for ingesting and validating oil market data
+- Analytics and forecasting workflows for price, volatility, and regime shifts
+- Dashboards, reports, and narrative summaries for decision support
+- A modular foundation for expanding data sources and models
+
+## Key capabilities
+
+- Time series ingestion, normalization, and validation
+- Supply, demand, and pricing signal analysis
+- Multi-model forecasting (naive, regression, ARIMA)
+- Regime and volatility tracking
+- Interactive dashboards and report generation
+
+## Architecture at a glance
 
 - **Frontend:** Next.js (App Router), TypeScript, Tailwind, Recharts
 - **Backend:** FastAPI, SQLModel, pandas, statsmodels, scikit-learn
@@ -47,21 +59,6 @@ Follow the README files inside each app for environment setup and run commands:
 - Backend: [backend/README.md](backend/README.md)
 - Frontend: [frontend/README.md](frontend/README.md)
 
-## Key capabilities
-
-- Data ingestion and validation for market time series
-- Statistical analysis and supply shock detection
-- Multi-model forecasting (naive, regression, ARIMA)
-- Notebook report generation
-- Interactive dashboards and reports
-
 ## Scope and intent
 
-PetroView is built to be a living research and analytics environment. It is intentionally structured to support:
-
-- **Global market tracking** with consistent data pipelines
-- **Explainable modeling** that emphasizes transparency over black-box outputs
-- **Operational decision support** for scenario planning and risk assessment
-- **Iterative research** through notebooks and extensible services
-
-If you are extending the project, keep the focus on reproducibility, clear assumptions, and traceable data lineage. The platform is most useful when each insight can be tracked back to its sources and methodology.
+PetroView is designed as a living research environment. Keep changes focused on reproducibility, clear assumptions, and traceable data lineage so insights can be tied back to sources and methodology.

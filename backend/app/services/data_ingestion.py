@@ -3,8 +3,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Optional
 import os
+import json
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
-import httpx
 import pandas as pd
 
 from app.core.config import settings
@@ -35,9 +37,10 @@ def _fetch_fred_api(series_id: str, api_key: str) -> pd.DataFrame:
         "api_key": api_key,
         "file_type": "json",
     }
-    response = httpx.get(FRED_OBSERVATIONS_URL, params=params, timeout=30)
-    response.raise_for_status()
-    payload = response.json()
+    query = urlencode(params)
+    url = f"{FRED_OBSERVATIONS_URL}?{query}"
+    with urlopen(url, timeout=30) as response:
+        payload = json.loads(response.read().decode("utf-8"))
     observations = payload.get("observations", [])
     df = pd.DataFrame(observations)
     if df.empty:

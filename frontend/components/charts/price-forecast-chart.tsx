@@ -1,6 +1,6 @@
 "use client";
 
-import { Area, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 type PricePoint = { date: string; price: number };
 type ForecastPoint = { date: string; forecast: number; lower?: number; upper?: number };
@@ -30,26 +30,43 @@ export function PriceForecastChart({ actual, forecast }: { actual: PricePoint[];
   return (
     <ResponsiveContainer width="100%" height={260}>
       <LineChart data={data}>
-        <XAxis dataKey="date" stroke="#7f8798" fontSize={12} />
-        <YAxis stroke="#7f8798" fontSize={12} />
+        <CartesianGrid stroke="rgba(var(--ink),0.08)" strokeDasharray="3 3" vertical={false} />
+        <XAxis dataKey="date" stroke="rgba(var(--ink),0.6)" fontSize={12} />
+        <YAxis stroke="rgba(var(--ink),0.6)" fontSize={12} />
         <Tooltip
           contentStyle={{
-            background: "#141821",
-            border: "1px solid rgba(255,255,255,0.1)",
+            background: "rgb(var(--panel))",
+            border: "1px solid rgba(var(--ink),0.1)",
             borderRadius: 12
           }}
-          labelStyle={{ color: "#f5c46a" }}
+          labelStyle={{ color: "rgb(var(--ink))" }}
         />
+        <defs>
+          <linearGradient id="forecast-band" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(var(--ocean),0.3)" />
+            <stop offset="100%" stopColor="rgba(var(--ocean),0.08)" />
+          </linearGradient>
+          <linearGradient id="forecast-line" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="rgb(var(--gold))" />
+            <stop offset="100%" stopColor="rgb(var(--ocean))" />
+          </linearGradient>
+        </defs>
         <Area
           type="monotone"
           dataKey="upper"
           stroke="none"
-          fill="rgba(31,111,235,0.18)"
-          baseLine={(data) => data.lower ?? data.upper ?? 0}
+          fill="url(#forecast-band)"
           connectNulls
         />
-        <Line dataKey="price" type="monotone" stroke="#f5c46a" strokeWidth={2} dot={false} />
-        <Line dataKey="forecast" type="monotone" stroke="#1f6feb" strokeWidth={2} dot={false} />
+        <Line dataKey="price" type="monotone" stroke="url(#forecast-line)" strokeWidth={2.5} dot={false} />
+        <Line
+          dataKey="forecast"
+          type="monotone"
+          stroke="rgb(var(--ember))"
+          strokeWidth={2}
+          dot={false}
+          strokeDasharray="6 4"
+        />
       </LineChart>
     </ResponsiveContainer>
   );

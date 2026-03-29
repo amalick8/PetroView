@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function AnalysisDetail() {
+export default function AnalysisIndex() {
   redirect("/dashboard#tape");
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { demoVolatilitySeries } from "@/lib/demo-data";
 
@@ -10,21 +10,28 @@ export function VolatilityChart({ data = demoVolatilitySeries }: { data?: VolPoi
   return (
     <ResponsiveContainer width="100%" height={220}>
       <AreaChart data={data}>
-        <XAxis dataKey="date" stroke="#7f8798" fontSize={12} />
-        <YAxis stroke="#7f8798" fontSize={12} />
+        <CartesianGrid stroke="rgba(var(--ink),0.08)" strokeDasharray="3 3" vertical={false} />
+        <XAxis dataKey="date" stroke="rgba(var(--ink),0.6)" fontSize={12} />
+        <YAxis stroke="rgba(var(--ink),0.6)" fontSize={12} />
         <Tooltip
           contentStyle={{
-            background: "#141821",
-            border: "1px solid rgba(255,255,255,0.1)",
+            background: "rgb(var(--panel))",
+            border: "1px solid rgba(var(--ink),0.1)",
             borderRadius: 12
           }}
-          labelStyle={{ color: "#f5c46a" }}
+          labelStyle={{ color: "rgb(var(--ink))" }}
         />
+        <defs>
+          <linearGradient id="sand-area" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="rgba(var(--gold),0.45)" />
+            <stop offset="100%" stopColor="rgba(var(--ocean),0.08)" />
+          </linearGradient>
+        </defs>
         <Area
           type="monotone"
           dataKey="value"
-          stroke="#1f6feb"
-          fill="rgba(31,111,235,0.25)"
+          stroke="rgb(var(--gold))"
+          fill="url(#sand-area)"
           strokeWidth={2}
         />
       </AreaChart>
