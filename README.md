@@ -11,10 +11,10 @@ PetroView is a full-stack platform that turns oil market signals into clear, dec
 <table>
   <tr>
     <td>
-      <img src="screenshots/Screenshot%202026-03-28%20at%207.47.42%E2%80%AFPM.png" width="480" alt="PetroView dashboard screenshot 1" />
+      <img src="screenshots/Screenshot%202026-03-28%20at%207.47.42%E2%80%AFPM.png" width="520" alt="PetroView dashboard screenshot 1" />
     </td>
     <td>
-      <img src="screenshots/Screenshot%202026-03-28%20at%207.48.25%E2%80%AFPM.png" width="480" alt="PetroView dashboard screenshot 2" />
+      <img src="screenshots/Screenshot%202026-03-28%20at%207.48.25%E2%80%AFPM.png" width="520" alt="PetroView dashboard screenshot 2" />
     </td>
   </tr>
 </table>
@@ -25,6 +25,15 @@ PetroView is a full-stack platform that turns oil market signals into clear, dec
 - Surfaces market structure shifts, risk regimes, and volatility
 - Produces dashboards, reports, and narrative summaries for decision support
 - Keeps data workflows traceable and reproducible
+
+## Conflict context (high level)
+
+Energy markets have been shaped by escalating Middle East tensions and other recent oil shocks. At a high level:
+
+- Late Feb 2026 saw a major U.S.-Israel strike campaign on Iranian targets followed by Iranian retaliation against regional bases and oil infrastructure.
+- Early March 2026 brought a de facto closure of the Strait of Hormuz, disrupting a significant share of global oil and LNG flows.
+- Prices spiked above $110–$120 per barrel, prompting a record IEA coordinated release to stabilize markets.
+- The escalation followed years of shipping disruptions, failed negotiations around Iran’s nuclear program, and a series of earlier oil conflicts (Russia–Ukraine, 2020 price war).
 
 ## Highlights
 

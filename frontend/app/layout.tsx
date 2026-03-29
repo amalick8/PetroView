@@ -15,7 +15,12 @@ export const metadata: Metadata = {
   title: "PetroView | Energy Intelligence",
   description: "AI-powered energy intelligence and predictive analytics for oil markets.",
   icons: {
-    icon: "/favicon.svg"
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.svg", sizes: "any" }
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg"
   }
 };
 
