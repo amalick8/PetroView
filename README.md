@@ -36,6 +36,61 @@ The goal is to make conflict-driven dynamics visible and comparable across time 
 - Regime and volatility tracking
 - Interactive dashboards and report generation
 
+## Real-world indicators (since 2023-10-07)
+
+The conflict escalation in the region in early October 2023 coincided with renewed volatility across energy and risk assets. Below is a high-level snapshot using public data series as proxies:
+
+- **US regular gasoline price (weekly):** $3.68 on 2023-10-09 to $3.96 on 2026-03-23 ($+7.52%)
+- **S&P 500 (daily):** 4,335.66 on 2023-10-09 to 6,368.85 on 2026-03-27 ($+46.89%)
+
+**US regular gasoline ($/gal, quarterly snapshot)**
+
+| Date | US Regular Gas ($/gal) |
+| --- | --- |
+| 2023-10-30 | 3.47 |
+| 2024-01-29 | 3.10 |
+| 2024-04-29 | 3.65 |
+| 2024-07-29 | 3.48 |
+| 2024-10-28 | 3.10 |
+| 2025-01-27 | 3.10 |
+| 2025-04-28 | 3.13 |
+| 2025-07-28 | 3.12 |
+| 2025-10-27 | 3.04 |
+| 2026-01-26 | 2.85 |
+
+```mermaid
+xychart-beta
+	title 'US Regular Gasoline (last 12 months)' 
+	x-axis [2025-04, 2025-05, 2025-06, 2025-07, 2025-08, 2025-09, 2025-10, 2025-11, 2025-12, 2026-01, 2026-02, 2026-03]
+	y-axis 'Value' 
+	line [3.13, 3.16, 3.16, 3.12, 3.15, 3.12, 3.04, 3.06, 2.81, 2.85, 2.94, 3.96]
+```
+
+**S&P 500 (quarterly snapshot)**
+
+| Date | S&P 500 |
+| --- | --- |
+| 2023-10-31 | 4193.80 |
+| 2024-01-31 | 4845.65 |
+| 2024-04-30 | 5035.69 |
+| 2024-07-31 | 5522.30 |
+| 2024-10-31 | 5705.45 |
+| 2025-01-31 | 6040.53 |
+| 2025-04-30 | 5569.06 |
+| 2025-07-31 | 6339.39 |
+| 2025-10-31 | 6840.20 |
+| 2026-01-30 | 6939.03 |
+
+```mermaid
+xychart-beta
+	title 'S&P 500 (last 12 months)' 
+	x-axis [2025-04, 2025-05, 2025-06, 2025-07, 2025-08, 2025-09, 2025-10, 2025-11, 2025-12, 2026-01, 2026-02, 2026-03]
+	y-axis 'Value' 
+	line [5569.06, 5911.69, 6204.95, 6339.39, 6460.26, 6688.46, 6840.20, 6849.09, 6845.50, 6939.03, 6878.88, 6368.85]
+```
+
+Data source: FRED (GASREGW, SP500). Values are snapshots pulled on 2026-03-28.
+
 ## Architecture at a glance
 
 - **Frontend:** Next.js (App Router), TypeScript, Tailwind, Recharts
